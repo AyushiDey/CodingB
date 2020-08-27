@@ -1,0 +1,188 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+typedef struct Basic
+{
+    int top1;
+    int top2;
+    int top3;
+}Basics;
+
+void implementation(Basics *Struc);
+int isFull1(Basics Struc, int N);
+int isFull2(Basics Struc, int N);
+int isFull3(Basics Struc, int N);
+int isEmpty1(Basics Struc);
+int isEmpty2(Basics Struc);
+void push_A(Basics *Struc,int element, int Array1[], int Array2[], int Array3[], int N);
+void push_B(Basics *Struc,int element, int Array2[], int Array3[], int N);
+void push_C(Basics *Struc,int element, int Array3[], int N);
+int popA(Basics *Struc, int Array[]);
+int popB(Basics *Struc, int Array[]);
+int pop1(Basics *Struc, int Array[]);
+int pop2(Basics *Struc, int Array[]);
+void Display(Basics *Struc,int Array1[],int Array2[],int Array3[]);
+
+int main()
+{
+    Basics Struc;
+    implementation(&Struc);
+    int N;
+    printf("Enter the size of three array: ");
+    scanf("%d",&N);
+    int *A = (int*)malloc(N*sizeof(int));
+    int *B = (int*)malloc(N*sizeof(int));
+    int *C = (int*)malloc(N*sizeof(int));
+    printf("Menu\n1. Push\n2. Display\n3. Exit\n");
+    while(1)
+    {
+        int num;
+        printf("Enter your choice: ");
+        scanf("%d",&num);
+        if(num == 1)
+        {
+            int element;
+            printf("Enter the element to inserted: ");
+            scanf("%d",&element);
+            push_A(&Struc, element, A, B, C, N);
+        }
+        else if(num == 2)
+        {
+            Display(&Struc,A,B,C);
+        }
+        else if(num==3)
+        {
+            return 0;
+        }
+        else
+        {
+            printf("Wrong Input\n\n");
+        }
+    }
+}
+void implementation(Basics *Struc)
+{
+    Struc->top1 = -1;
+    Struc->top2 = -1;
+    Struc->top3 = -1;
+}
+int isFull1(Basics Struc, int N)
+{
+    if (Struc.top1 == N-1)
+        return 1;
+    else
+        return 0;
+}
+int isFull2(Basics Struc, int N)
+{
+    if (Struc.top2 == N-1)
+        return 1;
+    else
+        return 0;
+}
+int isFull3(Basics Struc, int N)
+{
+    if (Struc.top3 == N-1)
+        return 1;
+    else
+        return 0;
+}
+int isEmpty1(Basics Struc)
+{
+    if (Struc.top1 == -1)
+        return 1;
+    else
+        return 0;
+}
+int isEmpty2(Basics Struc)
+{
+    if (Struc.top2 == -1)
+        return 1;
+    else
+        return 0;
+}
+void push_A(Basics *Struc,int element, int Array1[], int Array2[], int Array3[], int N)
+{
+    if (isFull1(*Struc, N) == 1)
+    {
+        int value = popA(Struc, Array1);
+        push_B(Struc, value, Array2, Array3, N);
+        pop1(Struc,Array1);
+    }
+    Struc->top1++;
+    Array1[Struc->top1] = element;
+}
+void push_B(Basics *Struc,int element, int Array2[], int Array3[], int N)
+{
+    if (isFull2(*Struc, N) == 1)
+    {
+        int value = popB(Struc, Array2);
+        push_C(Struc, value, Array3, N);
+        pop2(Struc,Array2);
+    }
+    Struc->top2++;
+    Array2[Struc->top2] = element;
+}
+void push_C(Basics *Struc,int element, int Array3[], int N)
+{
+    if (isFull3(*Struc, N) == 1)
+    {
+        printf("All the 3 stack are filled\n");
+    }
+    else
+    {
+        Struc->top3++;
+        Array3[Struc->top3] = element;
+    }
+}
+int pop1(Basics *Struc, int Array[])
+{
+    if (isEmpty1(*Struc) == 1)
+        return 1;
+    else
+    {
+        return Array[Struc->top1--];
+    }
+}
+int pop2(Basics *Struc, int Array[])
+{
+    if (isEmpty2(*Struc) == 1)
+        return 1;
+    else
+    {
+        return Array[Struc->top2--];
+    }
+}
+int popA(Basics *Struc, int Array[])
+{
+    int value = Array[Struc->top1];
+    return value;
+}
+int popB(Basics *Struc, int Array[])
+{
+    int value = Array[Struc->top2];
+    return value;
+}
+void Display(Basics *Struc,int Array1[],int Array2[],int Array3[])
+{
+    printf("The list A is: ");
+    for(int i = Struc->top1; i >= 0;--i)
+    {
+        printf("%d ",Array1[i]);
+    }
+    printf("\n");
+    
+    printf("The list B is: ");
+    for(int i = Struc->top2; i >= 0;--i)
+    {
+        printf("%d ",Array2[i]);
+    }
+    printf("\n");
+    printf("The list C is: ");
+    for(int i = Struc->top3; i >= 0;--i)
+    {
+        printf("%d ",Array3[i]);
+    }
+    printf("\n");
+}
